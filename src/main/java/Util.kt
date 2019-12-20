@@ -14,6 +14,7 @@ fun getGrad(start: Vector, func: VecFun, delta: Double): Vector {
         val diff = (func(start + dx) - func(start))
         grad.add(diff / (dx.coords[i]))
     }
+
     var tmp = Vector(grad)
     //tmp /= tmp.len
     return tmp
@@ -40,12 +41,16 @@ fun getSecDerivative(start: Vector, func: VecFun, arg1: Int, arg2: Int, delta: D
     return res
 }
 
-fun getMin(start: Vector, func: VecFun, delta: Double):Vector {
+fun getMin(start: Vector, func: VecFun, delta: Double, count:Int):Vector {
     val grad = getGrad(start,func,delta)
-    if (grad.len<delta) return start
-    val hesse = getHesse(start,func,delta)
-    val iter = start - (MatrixUtils.inverse(hesse)).operate(grad.toApache()).toVector()
-    return getMin(iter,func,delta)
+    if (grad.len<delta) {
+        println("Number of iterations: ${count-1}, gradient mod: ${grad.len}, delta: $delta")
+        return start
+    }
+        val hesse = getHesse(start,func,delta)
+        val iter = start - (MatrixUtils.inverse(hesse)).operate(grad.toApache()).toVector()
+        return getMin(iter,func,delta,count+1)
+
 }
 
 fun RealVector.toVector():Vector {

@@ -9,11 +9,15 @@ typealias VecFun = (Vector) -> Double
 
 fun getGrad(start: Vector, func: VecFun, delta: Double): Vector {
     val grad = ArrayList<Double>(start.arity)
-    for (i in 0 until start.arity) {
+    /*for (i in 0 until start.arity) {
         val dx = delta * start.project(i)
         val diff = (func(start + dx) - func(start))
         grad.add(diff / (dx.coords[i]))
-    }
+    }*/
+    val x = start.coords[0]
+    val y = start.coords[1]
+    grad[0]=4.0*(x.pow(3)-x*(y-50)-50)
+    grad[1]=2*(y-x)
     var tmp = Vector(grad)
     //tmp /= tmp.len
     return tmp
